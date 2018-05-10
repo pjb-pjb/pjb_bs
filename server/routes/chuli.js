@@ -2,7 +2,6 @@ function chuli(err,result,res){
 	if(err){
 		res.end("err");
 	}else{
-		console.log(result.affectedRows);
 		if(result.affectedRows>0){
 			res.end("ok");
 		}else{

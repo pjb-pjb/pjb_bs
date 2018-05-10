@@ -50,7 +50,7 @@
 					this.form.rnum="";
 				},
 				quxiao(){
-//					this.$router.push("/selectGoods");
+					this.$emit("tz");
 				},
 				onSubmit() {
 					if(this.form.wnum==""||this.form.snote==""||this.form.hname==""||this.form.rnum==""){

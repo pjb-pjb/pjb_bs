@@ -41,16 +41,13 @@
 	export default {
 		data() {
 			return {
-				currentDate: new Date(),
 				hnum:""
 			};
-		},
-		methods: {
-
 		},
 		computed: {
 			bedDatas() {
 				var obj={};
+				this.hnum=this.$store.state.bedDatas.length>0?this.$store.state.bedDatas[0].hnum:"";
 				this.$store.state.bedDatas.forEach((val)=>{
 					obj[val.hnum]=[];
 					val.bedinfo.split("|").forEach((val1)=>{

@@ -100,6 +100,18 @@
 										<router-link to="/enterInfo">
 											<el-menu-item index="6-1">入驻登记</el-menu-item>
 										</router-link>
+										<router-link to="/formal">
+											<el-menu-item index="6-2">正式签约</el-menu-item>
+										</router-link>
+										<router-link to="/costInfo">
+											<el-menu-item index="6-3">费用查询</el-menu-item>
+										</router-link>
+										<router-link to="/oldout">
+											<el-menu-item index="6-4">外出登记</el-menu-item>
+										</router-link>
+										<router-link to="/retreat">
+											<el-menu-item index="6-5">退住结算</el-menu-item>
+										</router-link>
 									</el-menu-item-group>
 								</el-submenu>
 							</el-menu>
@@ -131,7 +143,6 @@
 	export default {
 		data() {
 			return {
-
 			}
 		},
 		methods: {

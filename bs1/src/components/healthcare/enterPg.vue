@@ -42,7 +42,7 @@
 <script>
 	export default {
 		mounted() {
-			fetch("/api/enter/selectAll").then(function(e) {
+			fetch("/api/enter/selectAll3").then(function(e) {
 				return e.json();
 			}).then((e) => {
 				e.forEach((val) => {

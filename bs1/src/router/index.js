@@ -21,6 +21,13 @@ import selFood from '@/components/food/select.vue'
 import enterInfo from '@/components/enter/enterInfo.vue'
 import enterPg from '@/components/healthcare/enterPg.vue'
 import pgtest from '@/components/healthcare/pgtest.vue'
+import oldAdd from '@/components/old/add.vue'
+import costSelSy from '@/components/cost/selSy.vue'
+import fyxq from '@/components/cost/fyxq.vue'
+import oldout from '@/components/out/sel.vue'
+import oldoutadd from '@/components/out/add.vue'
+import retreat from '@/components/old/retreat.vue'
+import jsInfo from '@/components/old/jsInfo.vue'
 
 Vue.use(Router)
 
@@ -96,6 +103,27 @@ export default new Router({
       				component:pgtest
       			}
       		]
+      	},{
+      		path:"/formal",
+     			component:oldAdd
+      	},{
+      		path:"/costInfo",
+     			component:costSelSy
+      	},{
+      		path:"/fyxq",
+     			component:fyxq
+      	},{
+      		path:"/oldout",
+     			component:oldout
+      	},{
+      		path:"/oldoutadd",
+     			component:oldoutadd
+      	},{
+      		path:"/retreat",
+     			component:retreat
+      	},{
+      		path:"/jsInfo/:oid",
+     			component:jsInfo
       	}
       ]
     }

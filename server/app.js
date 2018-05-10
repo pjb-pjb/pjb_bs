@@ -15,6 +15,10 @@ var service = require('./routes/service/service.js');
 var food = require('./routes/food/food.js');
 var enter = require('./routes/enter/enter.js');
 var pg = require('./routes/healthcare/pg.js');
+var old = require('./routes/old/old.js');
+var cost = require("./routes/cost/cost.js");
+var out = require("./routes/out/out.js");
+var retreat = require("./routes/old/retreat.js");
 var app = express();
 var server=app.listen(8888,function(){
 	console.log("http://loaclhost:%s",server.address().port);
@@ -30,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/', index);
+//app.use('/', index);
 app.use('/api/visitors', visitors);
 app.use('/api/goods', goods);
 app.use('/api/ogoods', ogoods);
@@ -40,6 +44,10 @@ app.use('/api/service', service);
 app.use('/api/food', food);
 app.use('/api/enter', enter);
 app.use('/api/pg', pg);
+app.use('/api/old', old);
+app.use('/api/cost', cost);
+app.use('/api/out', out);
+app.use('/api/retreat', retreat);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

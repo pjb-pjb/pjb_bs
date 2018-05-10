@@ -46,7 +46,18 @@ router.get("/addSign",function(req,res){
 				}
 				async.parallel([function(next){
 					con.query("insert into pg (oid,pscore,ptime,weight,gmyw,disease,grade) values (?,?,?,?,?,?,?)",[oid,pscore,ptime,weight,gmyw,disease,grade],function(err,result){
-						console.log(err);
+						if(err){
+							next("err");
+						}else{
+							if(result.affectedRows==1){
+								next(null);
+							}else{
+								next("err");
+							}
+						}
+					});
+				},function(next){
+					con.query("update enter set estatus=2 where oid='"+oid+"'",function(err,result){
 						if(err){
 							next("err");
 						}else{

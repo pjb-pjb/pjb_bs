@@ -21,6 +21,7 @@ export default {
 	margin: 0;
 	padding: 0;
 	font-style: normal;
+	-webkit-user-select: none;
 }
 ui,li{
 	list-style: none;
@@ -34,4 +35,14 @@ a{
 th,td{
 	text-align: center !important;
 }
+.el-tabs .el-tabs__content{
+		position: static !important;
+}
+.sel{
+		padding: 5px;
+		height: 35px;
+		width: 200px;
+		font-size: 20px;
+		letter-spacing: 5px;
+	}
 </style>

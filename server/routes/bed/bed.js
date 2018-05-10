@@ -64,4 +64,21 @@ router.get("/selectRtype",function(req,res){
 	});
 });
 
+router.post("/edit",function(req,res){
+	mysql.getConnection(function(con){
+		con.query("update hours set hname=?,bedinfo=?,rid=? where hnum=?",[req.body.hname,req.body.bedinfo,req.body.rid,req.body.hnum],function(err,result){
+			con.release();
+			chuli(err,result,res);
+		});
+	});
+});
+
+router.get("/del/:hid",function(req,res){
+	mysql.getConnection(function(con){
+		con.query("delete from hours where hid="+req.params.hid,function(err,result){
+			con.release();
+			chuli(err,result,res);
+		});
+	});
+});
 module.exports = router;

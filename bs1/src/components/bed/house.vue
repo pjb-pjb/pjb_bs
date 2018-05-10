@@ -5,7 +5,7 @@
 				<selectBed></selectBed>
 			</el-tab-pane>
 			<el-tab-pane label="详细信息" name="second">
-				<selectInfo :tableData="tableData"></selectInfo>
+				<selectInfo :tableData="tableData" @gx="gx"></selectInfo>
 			</el-tab-pane>
 			<el-tab-pane label="床位设计" name="three">
 				<addBed @gx="gx"></addBed>
@@ -20,7 +20,7 @@
 	export default {
 		data() {
 			return {
-				activeName2: "",
+				activeName2: "first",
 				tableData: []
 			};
 		},
