@@ -5,7 +5,7 @@ var chuli = require("../chuli.js");
 var chuli1 = require("../chuli1.js");
 var async = require("async");
 var time = require("../time.js");
-
+var rz=require("../rz.js");
 /*按oid查询*/
 router.get('/selInfo', function(req, res, next) {
 	mysql.getConnection(function(con){
@@ -138,6 +138,7 @@ router.post("/addSign",function(req,res){
 								res.end("err");
 							}else{
 								res.end("ok");
+								rz(req,"老人签约("+oid+")");
 							}
 						});
 					}
@@ -174,6 +175,7 @@ router.get("/xy",function(req,res){
 		con.query("update contract set em_n=?,endtime=? where oid=?",[em_n,endtime,oid],function(err,result){
 			con.release();
 			chuli(err,result,res);
+			rz(req,"老人续约("+oid+")");
 		});
 	});
 });

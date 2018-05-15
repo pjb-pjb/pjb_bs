@@ -19,6 +19,10 @@ var old = require('./routes/old/old.js');
 var cost = require("./routes/cost/cost.js");
 var out = require("./routes/out/out.js");
 var retreat = require("./routes/old/retreat.js");
+var dc = require("./routes/food/dc.js");
+var login = require("./routes/login.js");
+var sys = require("./routes/sys/sys.js");
+var yz = require("./routes/healthcare/yz.js");
 var app = express();
 var server=app.listen(8888,function(){
 	console.log("http://loaclhost:%s",server.address().port);
@@ -48,6 +52,10 @@ app.use('/api/old', old);
 app.use('/api/cost', cost);
 app.use('/api/out', out);
 app.use('/api/retreat', retreat);
+app.use('/api/dc', dc);
+app.use('/api/login', login);
+app.use('/api/sys', sys);
+app.use('/api/yz', yz);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

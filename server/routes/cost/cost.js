@@ -6,6 +6,7 @@ var chuli = require("../chuli.js");
 var chuli1 = require("../chuli1.js");
 var async = require("async");
 var time = require("../time.js");
+var rz = require("../rz.js");
 
 /*查询费用剩余*/
 router.get("/selectAll", function(req, res) {
@@ -46,7 +47,6 @@ router.get("/selectPage", function(req, res) {
 		like = " where contract.oid=enter.oid and enter.estatus=1" + str;
 	}
 	var sql = "select contract.oid,enter.oname,contract.yjf from contract,enter" + like + " limit " + parseInt(req.query.page * 10) + ",10";
-	console.log(sql);
 	mysql.query(sql, function(err, result) {
 		chuli1(err, result, res);
 	});
@@ -112,6 +112,7 @@ router.get("/jf", function(req, res) {
 			async.parallel([function(next) {
 				con.query("update contract set yjf=? where oid=?", [req.query.yjf, req.query.oid], function(err, result) {
 					if(err) {
+						console.log(err);
 						next("err");
 					} else {
 						if(result.affectedRows == 1) {
@@ -122,9 +123,10 @@ router.get("/jf", function(req, res) {
 					}
 				});
 			}, function(next) {
-				con.query("insert into cost (oid,coststatus,costtime,costamount,cost_method) values (?,?,?,?)", [req.query.oid,0, time(new Date()), req.query.jf, "缴费"], function(err, result) {
+				con.query("insert into cost (oid,coststatus,costtime,costamount,cost_method) values (?,?,?,?,?)", [req.query.oid,0, time(new Date()), req.query.jf, "缴费"], function(err, result) {
 					if(err) {
 						next("err");
+						console.log(err);
 					} else {
 						if(result.affectedRows == 1) {
 							next(null);
@@ -146,6 +148,7 @@ router.get("/jf", function(req, res) {
 							res.end("err");
 						} else {
 							res.end("ok");
+							rz(req,"编号为"+req.query.oid+"老人缴费("+req.query.jf+")"); 
 						}
 					});
 				}

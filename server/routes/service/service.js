@@ -4,11 +4,12 @@ var mysql=require("../mysql-thing.js");
 var chuli=require("../chuli.js");
 var chuli1=require("../chuli1.js");
 var time=require("../time.js");
-
+var rz=require("../rz.js");
 router.get('/addSign', function(req, res, next) {
 	mysql.getConnection(function(con){
 		con.query("insert into service (spos,wnum,reptime,snote) values (?,?,?,?)",[req.query.spos,req.query.wnum,time(new Date()),req.query.snote],function(err,result){
 			chuli(err,result,res);
+			rz(req,"维修登记");
 		});
 	});
 });

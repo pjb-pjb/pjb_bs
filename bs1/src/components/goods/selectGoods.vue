@@ -15,7 +15,7 @@
 				<template slot-scope="scope">
 					<el-button type="text" size="small" @click="addNum(scope.row)">添加库存</el-button>
 					<el-button type="text" size="small" @click="edit(scope.row.gid)">编辑</el-button>
-					<el-button @click="handleClick(scope.row.gid)" type="text" size="small">删除</el-button>
+					<el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -29,18 +29,20 @@
 <script>
 	export default {
 		methods: {
-			handleClick(gid) {
+			handleClick(item) {
 				this.$confirm('此信息将被彻底删除?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					fetch("/api/goods/delSign?gid=" + gid).then(function(e) {
+					fetch("/api/goods/delSign?gid=" + item.gid+"&gnum="+item.gnum, {
+						credentials: 'include'
+					}).then(function(e) {
 						return e.text();
 					}).then((e) => {
 						if(e == "ok") {
 							this.tableData.filter = this.tableData.filter((val, index) => {
-								return val.gid != gid;
+								return val.gid != item.gid;
 							});
 							this.$message({
 								message: "删除成功",
@@ -78,14 +80,13 @@
 				});
 			},
 			find() {
-				if(this.like==""&&this.flag==0)
-				{
+				if(this.like == "" && this.flag == 0) {
 					return;
 				}
-				if(this.like==""){
-					this.flag=0;
-				}else{
-					this.flag=1;
+				if(this.like == "") {
+					this.flag = 0;
+				} else {
+					this.flag = 1;
 				}
 				this.selectAll();
 				this.selectPage();
@@ -106,20 +107,24 @@
 					showInput: true,
 					inputType: "number",
 					inputPattern: /^[^\-]/
-				}).then(({value}) => {
+				}).then(({
+					value
+				}) => {
 					if(value > 0) {
-						var sum=parseInt(item.gamount)+parseInt(value);
-						var params=`gid=${item.gid}&gnum=${item.gnum}&gamount=${sum}&eamount=${value}`;
-						fetch("/api/goods/addNum?"+params).then(function(e) {
+						var sum = parseInt(item.gamount) + parseInt(value);
+						var params = `gid=${item.gid}&gnum=${item.gnum}&gamount=${sum}&eamount=${value}`;
+						fetch("/api/goods/addNum?" + params, {
+							credentials: 'include'
+						}).then(function(e) {
 							return e.text();
 						}).then((e) => {
 							if(e == "ok") {
-								item.gamount=sum;
+								item.gamount = sum;
 								this.$message({
 									type: 'success',
 									message: '添加成功'
 								});
-							}else{
+							} else {
 								this.$message({
 									type: 'error',
 									message: '添加失败'
@@ -138,7 +143,7 @@
 				page: 0,
 				like: "",
 				num: 0,
-				flag:0
+				flag: 0
 			}
 		},
 		mounted() {

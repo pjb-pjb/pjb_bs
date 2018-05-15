@@ -164,7 +164,8 @@
 								"content-type": "application/x-www-form-urlencoded"
 							},
 							method: "post",
-							body: params
+							body: params,
+							credentials: 'include'
 						}).then(function(e) {
 							return e.text();
 						}).then((e) => {
@@ -222,10 +223,10 @@
 								arr1 = val1.split(".");
 								arr1[1].split(",").forEach((val2) => {
 									var arr2 = val2.split(":");
-									if(arr2[1] == val.rid) {
+									if(arr2[1] == val.bed_n) {
 										arr.push([arr2[0], -1,arr2[1]]);
 									} else {
-										arr.push([arr2[0], val.rid - arr2[1],arr2[1]]);
+										arr.push([arr2[0], val.bed_n - arr2[1],arr2[1]]);
 									}
 								});
 								obj[val.hnum].push([arr1[0], arr, val.r_type_name, val.r_price]);

@@ -143,8 +143,9 @@
 							}
 						}
 						var params = `wnum=${this.form.wnum}&bnum=${this.form.bnum}&oamount=${this.form.oamount}&gnum=${this.form.gnum}&otime=${this.form.otime}&obecause=${this.form.obecause}&gamount=${gamount}`;
-						console.log(params);
-						fetch("/api/ogoods/addSign?" + params).then(function(e) {
+						fetch("/api/ogoods/addSign?" + params, {
+							credentials: 'include'
+						}).then(function(e) {
 							return e.text()
 						}).then(function(e) {
 							if(e == "ok") {

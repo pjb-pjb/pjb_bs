@@ -45,4 +45,22 @@ th,td{
 		font-size: 20px;
 		letter-spacing: 5px;
 	}
+	.el-submenu>div{
+		height: 45px !important;
+		line-height: 45px !important;
+	}
+	.el-menu{
+		border: none !important;
+	}
+	.el-menu-item{
+		height: 44px !important;
+		line-height: 44px !important;
+	}
+	.el-menu-item-group>div{
+		height: 0 !important;
+		padding: 0 !important;
+	}
+	::-webkit-scrollbar {
+        width: 0px;
+    }
 </style>

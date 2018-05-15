@@ -91,7 +91,9 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					fetch(`/api/retreat/tz?oid=${this.$route.params.oid}&price=${this.price}&price1=${this.price1}&bedinfo=${bedinfo}&hnum=${hoursInfo}`).then(function(e){
+					fetch(`/api/retreat/tz?oid=${this.$route.params.oid}&price=${this.price}&price1=${this.price1}&bedinfo=${bedinfo}&hnum=${hoursInfo}`, {
+							credentials: 'include'
+						}).then(function(e){
 						return e.text();
 					}).then((e)=>{
 						if(e=="ok"){

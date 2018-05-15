@@ -53,12 +53,12 @@
 		},
 		methods: {
 			time(time) {
-				var year = time.getFullYear() > 10 ? time.getFullYear() : "0" + time.getFullYear();
-				var mon = time.getMonth() + 1 > 10 ? time.getMonth() + 1 : "0" + (time.getMonth() + 1);
-				var day = time.getDate() > 10 ? time.getDate() : "0" + time.getDate();
-				var hours = time.getHours() > 0 ? time.getHours() : "0" + time.getHours();
-				var min = time.getMinutes() > 0 ? time.getMinutes() : "0" + time.getMinutes();
-				var sec = time.getSeconds() > 0 ? time.getSeconds() : "0" + time.getSeconds();
+				var year = time.getFullYear() >= 10 ? time.getFullYear() : "0" + time.getFullYear();
+				var mon = time.getMonth() + 1 >= 10 ? time.getMonth() + 1 : "0" + (time.getMonth() + 1);
+				var day = time.getDate() >= 10 ? time.getDate() : "0" + time.getDate();
+				var hours = time.getHours() >= 10 ? time.getHours() : "0" + time.getHours();
+				var min = time.getMinutes() >= 10 ? time.getMinutes() : "0" + time.getMinutes();
+				var sec = time.getSeconds() >= 10 ? time.getSeconds() : "0" + time.getSeconds();
 				return year + "-" + mon + "-" + day + " " + hours + ":" + min + ":" + sec;
 			},
 			pg() {
@@ -151,7 +151,6 @@
 			tj() {
 				this.$refs["form"].validate((valid) => {
 					if(valid) {
-						console.log(this.$store.state.isAll);
 						if(!this.$store.state.isAll) {
 							this.$message({
 								message: "请认真评估",
@@ -166,7 +165,9 @@
 						} else {
 							str = "/api/pg/edit?" + params + "&pid=" + this.form.pid;
 						}
-						fetch(str).then(function(e) {
+						fetch(str,{
+							credentials: 'include'
+						}).then(function(e) {
 							return e.text();
 						}).then((e) => {
 							if(e == "ok") {
@@ -198,6 +199,7 @@
 		},
 		data() {
 			return {
+				nprice:[],
 				flag: true,
 				oidDatas: [],
 				onameDatas: [],

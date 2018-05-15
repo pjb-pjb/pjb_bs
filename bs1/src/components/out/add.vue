@@ -99,7 +99,9 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						var params=`oid=${this.form.oid}&otime=${this.form.otime}&nursename=${this.form.nursename}&outbecause=${this.form.outbecause}`;
-						fetch("/api/out/addSign?"+params).then(function(e){
+						fetch("/api/out/addSign?"+params,{
+							credentials: 'include'
+						}).then(function(e){
 							return e.text();
 						}).then((e)=>{
 							if(e=="ok"){

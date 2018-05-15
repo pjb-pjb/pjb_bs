@@ -12,10 +12,8 @@ router.post('/addBed', function(req, res, next) {
 	var height=req.body.height;
 	var bedinfo=req.body.bedinfo;
 	var rid=req.body.rid;
-	console.log(rid);
 	mysql.getConnection(function(con){
 		con.query("insert into hours (hnum,hname,height,bedinfo,rid) values (?,?,?,?,?)",[hnum,hname,height,bedinfo,rid],function(err,result){
-			console.log(err);
 			con.release();
 			chuli(err,result,res);
 		});
@@ -57,7 +55,7 @@ router.get("/selectInfo",function(req,res){
 
 router.get("/selectRtype",function(req,res){
 	mysql.getConnection(function(con){
-		con.query("select rid,r_type_name from room_type",function(err,result){
+		con.query("select rid,r_type_name from room_type where r_status=0",function(err,result){
 			con.release();
 			chuli1(err,result,res);
 		});

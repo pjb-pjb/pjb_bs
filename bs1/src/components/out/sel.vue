@@ -91,8 +91,10 @@
 				this.selectPage();
 			},
 			edit(item) {
-				var time=this.time(new Date());
-				fetch("/api/out/qrfh?oid=" + item.oid + "&backtime=" + time).then(function(e) {
+				var time = this.time(new Date());
+				fetch("/api/out/qrfh?oid=" + item.oid + "&backtime=" + time, {
+					credentials: 'include'
+				}).then(function(e) {
 					return e.text();
 				}).then((e) => {
 					if(e == "ok") {

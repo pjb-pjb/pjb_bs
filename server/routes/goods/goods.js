@@ -6,6 +6,7 @@ var chuli1 = require("../chuli1.js");
 var db=require("../mysql-thing.js");
 var time=require("../time.js");
 var async = require("async");
+var rz = require("../rz.js");
 /* 单条添加*/
 router.get('/addSign', function(req, res, next) {
 	db.getConnection(function(con){
@@ -41,6 +42,7 @@ router.get('/addSign', function(req, res, next) {
 						}else{
 							if(results[0].affectedRows>0&&results[1].affectedRows>0){
 								res.end("ok");
+								rz(req,"编号为"+gnum+"物品入库("+gamount+")");
 							}else{
 								res.end("err");
 							}
@@ -57,6 +59,7 @@ router.get('/addSign', function(req, res, next) {
 router.get("/delSign", function(req, res) {
 	mysql.query("delete from goods where gid=" + req.query.gid, function(err, result) {
 		chuli(err, result, res);
+		rz(req,"删除物品("+req.query.gnum+")");
 	});
 });
 
@@ -67,6 +70,7 @@ router.get("/edit", function(req, res) {
 	var gid = req.query.gid;
 	mysql.query("update goods set gname=?,gnum=? where gid=?", [gname, gnum, gid], function(err, result) {
 		chuli(err, result, res);
+		rz(req,"修改物品信息("+gnum+")");
 	});
 });
 
@@ -132,7 +136,6 @@ router.get("/addNum",function(req,res){
 					})
 				},
 				addEgoodsInfo:["getPrice",function(result,next){
-						console.log(result.getPrice);
 						con.query("insert into egoods (gnum,eamount,etime,eprice) values (?,?,?,?)",[gnum,eamount,time(new Date()),result.getPrice],function(err,result){
 						next(err,result);
 					});
@@ -151,6 +154,7 @@ router.get("/addNum",function(req,res){
 						}else{
 							if(results.addNum.affectedRows>0&&results.addEgoodsInfo.affectedRows){
 								res.end("ok");
+								rz(req,"编号为"+gnum+"物品入库("+eamount+")");
 							}else{
 								res.end("err");
 							}

@@ -61,7 +61,9 @@
 						return;
 					}
 					var params=`wnum=${this.form.wnum}&snote=${this.form.snote}&spos=${this.form.hname+this.form.rnum}`;
-					fetch("/api/service/addSign?"+params).then(function(e){
+					fetch("/api/service/addSign?"+params, {
+							credentials: 'include'
+						}).then(function(e){
 						return e.text();
 					}).then((e)=>{
 						if(e=="ok"){

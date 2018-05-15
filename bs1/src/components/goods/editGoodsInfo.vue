@@ -38,7 +38,9 @@
 						return;
 					}
 					var params=`gname=${this.form.gname}&gnum=${this.form.gnum}&gid=${this.$route.query.gid}`;
-					fetch("/api/goods/edit?"+params).then(function(e){
+					fetch("/api/goods/edit?"+params, {
+					credentials: 'include'
+				}).then(function(e){
 						return e.text();
 					}).then((e)=>{
 						if(e=="ok"){

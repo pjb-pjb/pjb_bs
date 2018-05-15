@@ -3,7 +3,7 @@
 		<div style="display: flex;justify-content: space-between;">
 			<h2 style="font-size: 20px;padding:0 0 20px 30px;">老人信息<span v-if="form.estatus=='-1'" style="color: red;font-size: 14px;">(离开)</span><span v-else-if="form.estatus=='0'" style="color: red;font-size: 14px;">(未评估)</span><span v-else-if="form.estatus=='2'" style="color: red;font-size: 14px;">(未签约)</span><span v-else-if="form.estatus=='1'" style="color: red;font-size: 14px;">(已签约)</span></h2>
 			<div>
-				<el-button type="primary" @click="edit">编辑</el-button>
+				<el-button type="primary" @click="edit" v-if="form.estatus!='-1'">编辑</el-button>
 			</div>
 		</div>
 		<el-form ref="form" :model="form" label-width="80px" :rules="rules" style="display: flex;flex-wrap: wrap;">
@@ -179,7 +179,7 @@
 						dangerouslyUseHTMLString: true,
 						callback: action => {
 							var xynx = document.querySelector(".sel").value * 1;
-							var str1=xynx==-1?"将终身续约":`将续约${xynx}年`;
+							var str1 = xynx == -1 ? "将终身续约" : `将续约${xynx}年`;
 							if(action == "confirm") {
 								this.$confirm(str1, '提示', {
 									confirmButtonText: '确定',
@@ -187,16 +187,18 @@
 									type: 'warning',
 									center: true
 								}).then(() => {
-									fetch(`/api/old/xy?xynx=${xynx}&endtime=${this.form2.endtime}&em_n=${this.form2.em_n}&oid=${this.form.oid}`).then(function(e){
+									fetch(`/api/old/xy?xynx=${xynx}&endtime=${this.form2.endtime}&em_n=${this.form2.em_n}&oid=${this.form.oid}`, {
+										credentials: 'include'
+									}).then(function(e) {
 										return e.text();
-									}).then((e)=>{
-										if(e=="ok"){
+									}).then((e) => {
+										if(e == "ok") {
 											this.selInfo();
 											this.$message({
 												type: 'success',
 												message: '续约成功'
 											});
-										}else{
+										} else {
 											this.$message({
 												type: 'error',
 												message: '续约失败'
@@ -247,10 +249,10 @@
 								arr1 = val1.split(".");
 								arr1[1].split(",").forEach((val2) => {
 									var arr2 = val2.split(":");
-									if(arr2[1] == val.rid) {
-										arr.push([arr2[0], -1,arr2[1]]);
+									if(arr2[1] == val.bed_n) {
+										arr.push([arr2[0], -1, arr2[1]]);
 									} else {
-										arr.push([arr2[0], val.rid - arr2[1], arr2[1]]);
+										arr.push([arr2[0], val.bed_n - arr2[1], arr2[1]]);
 									}
 								});
 								obj[val.hnum].push([arr1[0], arr, val.r_type_name, val.r_price]);
@@ -344,14 +346,13 @@
 				if(this.form2.eaddress != this.oldEAddress.join("")) {
 					var arr = this.arr;
 					console.log(this.bedDatas[arr[0]][arr[1]][1][arr[2]]);
-					this.bedDatas[arr[0]][arr[1]][1][arr[2]][1] = this.bedDatas[arr[0]][arr[1]][1][arr[2]][1]*1 - 1;
+					this.bedDatas[arr[0]][arr[1]][1][arr[2]][1] = this.bedDatas[arr[0]][arr[1]][1][arr[2]][1] * 1 - 1;
 					this.bedDatas[arr[0]][arr[1]][1][arr[2]][2] = this.bedDatas[arr[0]][arr[1]][1][arr[2]][2] * 1 + 1;
 					if(arr[0] == this.oldEAddress[0]) {
 						this.bedDatas[arr[0]].forEach((item) => {
 							var louceng = item[0];
 							var str = "";
 							item[1].forEach((val) => {
-								console.log(val)
 								if(val[0] == this.oldEAddress[1]) {
 									val[2] = val[2] - 1;
 								}

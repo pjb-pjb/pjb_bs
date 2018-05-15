@@ -14,7 +14,8 @@ var store=new Vuex.Store({
 		oid:"",
 		score:0,
 		isAll:false,
-		bedDatas:[]
+		bedDatas:[],
+		oid1:""
 	},
 	mutations:{
 		setWc(state){

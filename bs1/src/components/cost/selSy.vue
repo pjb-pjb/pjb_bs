@@ -40,8 +40,8 @@
 <script>
 	export default {
 		methods: {
-			selFy(oid){
-				this.$router.push("/fyxq?oid="+oid);
+			selFy(oid) {
+				this.$router.push("/fyxq?oid=" + oid);
 			},
 			change() {
 				this.selectAll();
@@ -85,22 +85,24 @@
 				}).then(({
 					value
 				}) => {
-					if(!(value*1)){
+					if(!(value * 1)) {
 						return;
 					}
 					var oid = item.oid;
 					var yjf = item.yjf;
-					yjf=yjf*1+value*1;
-					fetch(`/api/cost/jf?oid=${oid}&yjf=${yjf}&jf=${value}`).then(function(e){
+					yjf = yjf * 1 + value * 1;
+					fetch(`/api/cost/jf?oid=${oid}&yjf=${yjf}&jf=${value}`, {
+						credentials: 'include'
+					}).then(function(e) {
 						return e.text();
-					}).then((e)=>{
-						if(e=="ok"){
-							item.yjf=yjf;
+					}).then((e) => {
+						if(e == "ok") {
+							item.yjf = yjf;
 							this.$message({
 								type: 'success',
 								message: '缴费成功'
 							});
-						}else{
+						} else {
 							this.$message({
 								type: 'error',
 								message: '缴费失败'

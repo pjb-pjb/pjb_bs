@@ -24,52 +24,54 @@
 <script>
 	export default {
 		data() {
-				return {
-					form: {
-						gname: "",
-						gnum: "",
-						gamount: "",
-						eprice: ""
-					}
+			return {
+				form: {
+					gname: "",
+					gnum: "",
+					gamount: "",
+					eprice: ""
 				}
-			},
-			methods: {
-				quxiao(){
-					this.$router.push("/selectGoods");
-				},
-				onSubmit() {
-					if(this.form.gname==""||this.form.gnum==""||this.form.gamount==""||this.form.gprice==""){
-						this.$message({
-							message:"请完善信息",
-							type:"warning"
-						});
-						return;
-					}
-					var params=`gname=${this.form.gname}&gnum=${this.form.gnum}&gamount=${this.form.gamount}&eprice=${this.form.eprice}`;
-					fetch("/api/goods/addSign?"+params).then(function(e){
-						return e.text();
-					}).then((e)=>{
-						if(e=="ok"){
-							this.$message({
-								message:"添加成功",
-								type:"success"
-							});
-							this.$router.push("/selectGoods");
-						}else{
-							this.$message({
-								message:"添加失败",
-								type:"error"
-							});
-						}
-					});
-				}
-			},
-			mounted() {
-				
 			}
+		},
+		methods: {
+			quxiao() {
+				this.$router.push("/selectGoods");
+			},
+			onSubmit() {
+				if(this.form.gname == "" || this.form.gnum == "" || this.form.gamount == "" || this.form.gprice == "") {
+					this.$message({
+						message: "请完善信息",
+						type: "warning"
+					});
+					return;
+				}
+				var params = `gname=${this.form.gname}&gnum=${this.form.gnum}&gamount=${this.form.gamount}&eprice=${this.form.eprice}`;
+				fetch("/api/goods/addSign?" + params, {
+					credentials: 'include'
+				}).then(function(e) {
+					return e.text();
+				}).then((e) => {
+					if(e == "ok") {
+						this.$message({
+							message: "添加成功",
+							type: "success"
+						});
+						this.$router.push("/selectGoods");
+					} else {
+						this.$message({
+							message: "添加失败",
+							type: "error"
+						});
+					}
+				});
+			}
+		},
+		mounted() {
+
+		}
 	}
 </script>
 
 <style scoped="scoped">
-	
+
 </style>

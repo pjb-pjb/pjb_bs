@@ -6,7 +6,7 @@ var chuli = require("../chuli.js");
 var chuli1 = require("../chuli1.js");
 var async = require("async");
 var time = require("../time.js");
-
+var rz=require("../rz.js");
 /*按条件分页查询*/
 router.get("/selectAll", function(req, res) {
 	var like = "";
@@ -156,6 +156,7 @@ router.get("/tz", function(req, res) {
 							res.end("err");
 						} else {
 							res.end("ok");
+							rz(req,"退住登记("+oid+")");
 						}
 					});
 				}

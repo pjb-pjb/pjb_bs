@@ -6,6 +6,7 @@ var chuli = require("../chuli.js");
 var chuli1 = require("../chuli1.js");
 var async = require("async");
 var time = require("../time.js");
+var rz = require("../rz.js");
 
 /*查询陪护人员信息*/
 router.get("/selNurse",function(req,res){
@@ -18,8 +19,8 @@ router.get("/selNurse",function(req,res){
 router.get("/addSign",function(req,res){
 	var {oid,otime,nursename,outbecause}=req.query;
 	mysql.query("insert into `out` (oid,otime,nursename,outbecause) values (?,?,?,?)",[oid,otime,nursename?nursename:"",outbecause],function(err,result){
-		console.log(err);
 		chuli(err,result,res);
+		rz(req,"老人外出登记("+oid+")");
 	});
 });
 
@@ -74,8 +75,8 @@ router.get("/selectPage", function(req, res) {
 /*确认返回*/
 router.get("/qrfh",function(req,res){
 	mysql.query("update `out` set ostatus=1,backtime='"+req.query.backtime+"' where oid='"+req.query.oid+"'",function(err,result){
-		console.log(err);
 		chuli(err,result,res);
+		rz(req,"老人返回("+req.query.oid+")");
 	});
 });
 module.exports = router;
