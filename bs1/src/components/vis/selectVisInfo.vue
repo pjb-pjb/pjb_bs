@@ -17,7 +17,7 @@
 			</el-table-column>
 			<el-table-column fixed prop="leatime" label="离开时间" width="200">
 			</el-table-column>
-			<el-table-column fixed prop="because" label="来访事由" width="100">
+			<el-table-column fixed prop="because" label="来访事由" width="193">
 				<template slot-scope="scope">
 					<el-popover trigger="hover" placement="top">
 						{{scope.row.because}}

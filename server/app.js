@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var visitors = require('./routes/visitors/visitors.js');
 var goods = require('./routes/goods/goods.js');
 var ogoods = require('./routes/goods/ogoods.js');
+var egoods = require('./routes/goods/egoods.js');
 var worker = require('./routes/worker/worker.js');
 var bed = require('./routes/bed/bed.js');
 var service = require('./routes/service/service.js');
@@ -56,6 +57,7 @@ app.use('/api/dc', dc);
 app.use('/api/login', login);
 app.use('/api/sys', sys);
 app.use('/api/yz', yz);
+app.use('/api/egoods', egoods);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

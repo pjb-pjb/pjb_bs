@@ -1,18 +1,10 @@
 <template>
 	<el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-		<el-tab-pane label="自我照顾能力评分" name="first">
-			<div style="padding-bottom: 20px;margin-left: 10px;" v-for="(item,index) in testDatas">
-				<p style="margin-bottom: 10px;"><span>{{index+1}}、</span>{{item.title}}</p>
+		<el-tab-pane :label="item.name" :name="n.toString()" v-for="(item,n) in testDatas" :key="n">
+			<div style="padding-bottom: 20px;margin-left: 10px;" v-for="(item1,index) in item.datas">
+				<p style="margin-bottom: 10px;"><span>{{index+1}}.</span>{{item1[0]}}</p>
 				<div style="margin-left: 20px;">
-					<el-radio :key="key" v-model="item.df" :label="item.score[key].toString()" v-for="(item1,key) in result" :name="index.toString()" @change="change(item.score[key],index,0)">{{item1}}</el-radio>
-				</div>
-			</div>
-		</el-tab-pane>
-		<el-tab-pane label="MORSE 评估" name="second">
-			<div style="padding-bottom: 20px;margin-left: 10px;" v-for="(item,index) in testDatas1">
-				<p style="margin-bottom: 10px;"><span>{{index+1}}、</span>{{item.title}}</p>
-				<div style="margin-left: 20px;">
-					<el-radio :key="key" v-model="item.df" :label="item.score[key].toString()" v-for="(item1,key) in result1[index]" @change="change(item.score[key],index,1)" :name="index.toString()">{{item1}}</el-radio>
+					<el-radio :key="key" v-model="item1[3]" :label="item1[1][key]" v-for="(item2,key) in item1[2]" :name="index.toString()" @change="change(item1[1][key],index,item.name)">{{item2}}</el-radio>
 				</div>
 			</div>
 		</el-tab-pane>
@@ -23,46 +15,33 @@
 	export default {
 		data() {
 			return {
-				activeName2: 'first',
-	testDatas: [],
-	testDatas1: [],
-	result: [],
-	result1: [],
-	optionArr1: [],
-	optionArr2: [],
-	a: true
-};
-},
-methods: {
-		handleClick(tab, event) {},
-		change(score, index, type) {
-			this.$store.state.isAll=true;
-			if(type == 0) {
-				this.optionArr1[index] = score;
-			} else if(type == 1) {
-				this.optionArr2[index] = score;
-			}
-			this.$store.state.score = 0;
-			for(let i=0;i<this.testDatas.length;i++){
-				var val=this.optionArr1[i];
-				if(typeof val=="undefined"){
-					this.$store.state.isAll=false;
-					continue;
+				activeName2: 0,
+				testDatas: []
+			};
+		},
+		methods: {
+			handleClick(tab, event) {},
+			change(score, index, type) {
+				this.testDatas = Object.assign([], this.testDatas)
+				this.$store.state.isAll = true;
+				if(typeof this[type]=="undefined"){
+					this[type]={};
 				}
-				this.$store.state.score = parseInt(this.$store.state.score) + parseInt(val);
+				this[type][index]=score;
+				this.$store.state.score = 0;
+				this.testDatas.forEach((val,index)=>{
+					val.datas.forEach((val1)=>{
+						if(val1[3]==""){
+							this.$store.state.isAll = false;
+						}else{
+							this.$store.state.score = parseFloat(this.$store.state.score) + parseInt(val1[3])/this.testDatas.length;
+						}
+					});
+				});
 			}
-			for(let i=0;i<this.testDatas1.length;i++){
-				var val=this.optionArr2[i];
-				if(typeof val=="undefined"){
-					this.$store.state.isAll=false;
-					continue;
-				}
-				this.$store.state.score = parseInt(this.$store.state.score) + parseInt(val);
-			}
-		}
-	},
-	mounted() {
-		if(this.$store.state.oid =="") {
+		},
+		mounted() {
+			if(this.$store.state.oid == "") {
 				this.$router.push("/enterPg");
 				return;
 			}
@@ -70,31 +49,18 @@ methods: {
 				return e.json();
 			}).then((e) => {
 				e.forEach((val) => {
-					if(val.pttype == "0") {
-						this.result = val.result.split("|");
-					}
-					if(val.pttype == "1") {
-						var arr2 = val.result.split("|");
-						arr2.forEach((val1) => {
-							this.result1.push(val1.split(","));
-						});
-					}
-					var arr = val.pttitle.split("|");
-					arr.forEach((val1) => {
-						var arr1 = val1.split(":");
-						var obj = {
-							title: arr1[0],
-							score: arr1[1].split(","),
-							df: ""
-						};
-						if(val.pttype == "0") {
-							this.testDatas.push(obj);
-						}
-						if(val.pttype == "1") {
-							this.testDatas1.push(obj);
-						}
+					var arr=[];
+					arr.name=val.ptname;
+					var arr1=val.pttitle.split("|");
+					var arr2=val.result.split("|");
+					var arr3=[];
+					arr1.forEach((val1,index)=>{
+						arr3.push([val1.split(":")[0],val1.split(":")[1].split(","),arr2[index].split(","),""]);
 					});
+					arr.datas=arr3;
+					this.testDatas.push(arr);
 				});
+				console.log(this.testDatas);
 			});
 		}
 	};

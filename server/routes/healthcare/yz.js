@@ -109,4 +109,13 @@ router.get("/selByDid",function(req,res){
 		chuli1(err,result,res);
 	});
 });
+
+/*查询医嘱修改信息*/
+router.get("/selEditInfo",function(req,res){
+	var sql="select doctor_advice_edit.*,a.wname,a.dtime,a.d_type from doctor_advice_edit,doctor_advice as a where doctor_advice_edit.did=a.did and a.oid='"+req.query.oid+"'";
+	console.log(sql)
+	mysql.query(sql,function(err,result){
+		chuli1(err,result,res);
+	});
+});
 module.exports = router;

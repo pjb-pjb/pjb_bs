@@ -12,10 +12,10 @@
 			</el-form-item>
 			<el-form-item label="退住原因">
 				<el-select v-model="form.because" placeholder="请选择" @change="change">
-					<el-option key="0" label="死亡" value="0"></el-option>
-					<el-option key="1" label="病重" value="1"></el-option>
-					<el-option key="2" label="合同到期" value="2"></el-option>
-					<el-option key="3" label="其他" value="3"></el-option>
+					<el-option key="0" label="死亡" value="死亡"></el-option>
+					<el-option key="1" label="病重" value="病重"></el-option>
+					<el-option key="2" label="合同到期" value="合同到期"></el-option>
+					<el-option key="3" label="其他" value="其他"></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="是否违约">
@@ -91,7 +91,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					fetch(`/api/retreat/tz?oid=${this.$route.params.oid}&price=${this.price}&price1=${this.price1}&bedinfo=${bedinfo}&hnum=${hoursInfo}`, {
+					fetch(`/api/retreat/tz?oid=${this.$route.params.oid}&price=${this.price}&price1=${this.price1}&bedinfo=${bedinfo}&hnum=${hoursInfo}&tz_because=${this.form.because}`, {
 							credentials: 'include'
 						}).then(function(e){
 						return e.text();

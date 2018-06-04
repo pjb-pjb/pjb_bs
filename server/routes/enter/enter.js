@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require("../mysql-thing");
+var mysql1 = require("../mysql");
 var chuli = require("../chuli.js");
 var chuli1 = require("../chuli1.js");
 var async = require("async");
@@ -15,22 +16,7 @@ router.post('/addSign', function(req, res, next) {
 				con.release();
 				res.end("err");
 			} else {
-				var {
-					etime,
-					oname,
-					onum,
-					osex,
-					otelnum,
-					obir,
-					oaddress,
-					marstatus,
-					jnum,
-					jname,
-					jtelnum,
-					jaddress,
-					bind,
-					jsex
-				} = req.body;
+				var { etime, oname, onum, osex, otelnum, obir, oaddress, marstatus, jnum, jname, jtelnum, jaddress, bind, jsex } = req.body;
 				var oid = getId();
 				async.parallel([function(next) {
 					con.query("insert into enter (etime,oname,onum,osex,otelnum,obir,oaddress,marstatus,oid) values (?,?,?,?,?,?,?,?,?)", [time(new Date(etime)), oname, onum, osex, otelnum, time(new Date(obir)).split(" ")[0], oaddress, marstatus, oid], function(err, result) {
@@ -144,16 +130,6 @@ router.get("/selectSign", function(req, res) {
 		}
 	});
 })
-
-//router.get("/delSign",function(req,res){
-//	mysql.getConnection(function(con) {
-//		con.query("delete", function(err, result) {
-//			con.release();
-//			chuli1(err, result, res);
-//		});
-//	});
-//});
-
 /* 编辑 */
 router.post("/edit",function(req,res){
 	mysql.getConnection(function(con) {
@@ -163,32 +139,7 @@ router.post("/edit",function(req,res){
 				res.end("err");
 			} else {
 				console.log(req.body);
-				var {
-					etime,
-					oname,
-					onum,
-					osex,
-					otelnum,
-					obir,
-					oaddress,
-					marstatus,
-					jnum,
-					jname,
-					jtelnum,
-					jaddress,
-					bind,
-					jsex,
-					jid,
-					eid,
-					bedinfo,
-					oldbedinfo,
-					r_price,
-					shprice,
-					newhnum,
-					oldhnum,
-					oid,
-					eaddress
-				} = req.body;
+				var { etime, oname, onum, osex, otelnum, obir, oaddress, marstatus, jnum, jname, jtelnum, jaddress, bind, jsex, jid, eid, bedinfo, oldbedinfo, r_price, shprice, newhnum, oldhnum, oid, eaddress } = req.body;
 				async.parallel([function(next) {
 					con.query("update enter set oname=?,onum=?,osex=?,otelnum=?,obir=?,oaddress=?,marstatus=? where eid=?", [ oname, onum, osex, otelnum, time(new Date(obir)), oaddress, marstatus, eid], function(err, result) {
 						if(err || result.affectedRows == 0) {
@@ -257,4 +208,10 @@ router.post("/edit",function(req,res){
 	})
 });
 
+/*查询所有*/
+router.get("/selAll",function(req,res){
+	mysql1.query("select enter.*,contract.* from enter,contract where contract.oid=enter.oid and estatus=1",function(err,result){
+		chuli1(err,result,res)
+	});
+});
 module.exports = router;

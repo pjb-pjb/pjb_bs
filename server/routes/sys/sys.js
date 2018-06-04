@@ -7,6 +7,8 @@ var chuli1 = require("../chuli1.js");
 var async = require("async");
 var time = require("../time.js");
 var md5 = require("../md5.js");
+var multer = require("multer");
+var xlsx=require("node-xlsx");
 /*部门管理*/
 router.get("/selBarInfo", function(req, res) {
 	mysql.query("select * from branch", function(err, result) {
@@ -186,4 +188,107 @@ router.get("/selWorkerInfo",function(req,res){
 		chuli1(err,result,res);
 	});
 });
+
+/*膳食费用管理*/
+router.get("/selShanshiInfo",function(req,res){
+	mysql.query("select * from shanshi where shstatus=0",function(err,result){
+		chuli1(err,result,res);
+	});
+});
+
+router.get("/editShprice",function(req,res){
+	mysql.query("update shanshi set shprice=? where shid=?",[req.query.shprice,req.query.shid],function(err,result){
+		chuli(err,result,res);
+	});
+});
+
+/*护理费管理*/
+router.get("/selNurseInfo",function(req,res){
+	mysql.query("select * from nurse",function(err,result){
+		chuli1(err,result,res);
+	});
+});
+
+router.get("/editNursePrice",function(req,res){
+	mysql.query("update nurse set nprice=? where nid=?",[req.query.nprice,req.query.nid],function(err,result){
+		console.log(err);
+		chuli(err,result,res);
+	});
+});
+
+/*评估试题管理*/
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null,Date.now()+"-"+file.originalname)
+  }
+})
+
+var upload = multer({ storage: storage })
+
+router.get("/selTestInfo",function(req,res){
+	mysql.query("select * from pgtest",function(err,result){
+		chuli1(err,result,res);
+	});
+});
+
+router.get("/editPgTestInfo",function(req,res){
+	mysql.query("update pgtest set ptstatus="+req.query.ptstatus+" where ptid="+req.query.ptid,function(err,result){
+		chuli(err,result,res);
+	});
+});
+
+router.post("/addTest",upload.single('file'),function(req,res){
+	var datas=xlsx.parse(req.file.path);
+	var title="";
+	var result="";
+	datas.forEach(function(val,index){
+		val.data.forEach(function(val1,index1){
+			if(index1!=0){
+				title=title+val1[1]+":"+val1[3]+"|";
+				result=result+val1[2]+"|";
+			}
+		});
+	});
+	var name=req.file.originalname.split(".")[0];
+	mysql.query("insert into pgtest (pttitle,result,ptname) values (?,?,?)",[title,result,name],function(err,result){
+		chuli(err,result,res);
+	});
+});
+
+/*代办事项查询*/
+router.get("/selDbsx",function(req,res){
+	async.parallel([function(next){
+		mysql.query("select * from goods where gamount<=5",function(err,result){
+			next(err,result);
+		});
+	},function(next){
+		mysql.query("select * from enter where estatus!=-1 and estatus!=1",function(err,result){
+			next(err,result);
+		});
+	},function(next){
+		mysql.query("select * from contract where yjf<0",function(err,result){
+			next(err,result);
+		});
+	}],function(err,results){
+		var obj={
+			db:0,
+			qf:0,
+			kc:0
+		}
+		if(err){
+			res.end(JSON.stringify(obj));
+		}else{
+			obj.kc=results[0].length;
+			obj.db=results[1].length;
+			obj.qf=results[2].length;
+			res.end(JSON.stringify(obj));
+		}
+	});
+});
+
+
+
 module.exports = router;

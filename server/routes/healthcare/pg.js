@@ -8,7 +8,7 @@ var rz = require("../rz.js");
 /* 查询试题 */
 router.get('/selTest', function(req, res, next) {
 	mysql.getConnection(function(con) {
-		con.query("select * from pgtest", function(err, result) {
+		con.query("select * from pgtest where ptstatus=0", function(err, result) {
 			con.release();
 			chuli1(err, result, res);
 		});
@@ -42,11 +42,11 @@ router.get("/addSign", function(req, res) {
 					disease
 				} = req.query;
 				var grade = "";
-				if(pscore >= 180) {
+				if(pscore >= 90) {
 					grade = '三级';
-				} else if(pscore < 180 && pscore >= 160) {
+				} else if(pscore < 90 && pscore >= 75) {
 					grade = "二级";
-				} else if(pscore < 160 && pscore >= 140) {
+				} else if(pscore < 75 && pscore >= 60) {
 					grade = "一级";
 				} else {
 					grade = "特殊";
@@ -116,11 +116,11 @@ router.get("/edit", function(req, res) {
 					pid
 				} = req.query;
 				var grade = "";
-				if(pscore >= 180) {
+				if(pscore >= 90) {
 					grade = '三级';
-				} else if(pscore < 180 && pscore >= 160) {
+				} else if(pscore < 90 && pscore >= 75) {
 					grade = "二级";
-				} else if(pscore < 160 && pscore >= 140) {
+				} else if(pscore < 75 && pscore >= 60) {
 					grade = "一级";
 				} else {
 					grade = "特殊";
@@ -138,8 +138,7 @@ router.get("/edit", function(req, res) {
 						}
 					});
 				}, function(next) {
-					var sql="update contract,nurse set contract.grade='"+grade+"',contract.nprice=nurse.nprice where oid='" + oid + "' and nurse.grade='"+grade+"'";
-					console.log(sql);
+					var sql = "update contract,nurse set contract.grade='" + grade + "',contract.nprice=nurse.nprice where oid='" + oid + "' and nurse.grade='" + grade + "'";
 					con.query(sql, function(err, result) {
 						if(err) {
 							console.log(err);

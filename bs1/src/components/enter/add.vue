@@ -59,7 +59,7 @@
 				<el-input v-model="form1.jaddress" style="width: 500px;"></el-input>
 			</el-form-item>
 		</el-form>
-		<el-button type="primary" @click="submit()" style="margin-left: 30px;">立即创建</el-button>
+		<el-button type="primary" @click="submit()" style="margin-left: 30px;">提交</el-button>
 		<el-button @click="cz()" style="margin-left: 30px;">重置</el-button>
 	</div>
 </template>

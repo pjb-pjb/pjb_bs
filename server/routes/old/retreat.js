@@ -71,7 +71,8 @@ router.get("/tz", function(req, res) {
 		price,
 		price1,
 		bedinfo,
-		hnum
+		hnum,
+		tz_because
 	} = req.query;
 	mysql1.getConnection(function(con) {
 		con.beginTransaction(function(err) {
@@ -118,7 +119,7 @@ router.get("/tz", function(req, res) {
 					}
 				});
 			}, function(next) {
-				con.query("update contract set cstatus=-1,yjf=0 where oid='" + oid + "'", function(err, result) {
+				con.query("update contract set cstatus=-1,yjf=0,tz_because=?,tz_time=? where oid='" + oid + "'",[tz_because,time(new Date()).split(" ")[0]], function(err, result) {
 					if(err) {
 						console.log(err);
 						next("err");

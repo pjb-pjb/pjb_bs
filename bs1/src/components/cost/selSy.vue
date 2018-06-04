@@ -121,7 +121,6 @@
 				this.selectPage();
 			},
 			chakan(because) {
-				console.log(11111);
 			}
 		},
 		data() {
@@ -136,6 +135,9 @@
 			}
 		},
 		mounted() {
+			if(this.$route.query.flag=="qf"){
+				this.isQf="1";
+			}
 			this.selectAll();
 			this.selectPage();
 		}

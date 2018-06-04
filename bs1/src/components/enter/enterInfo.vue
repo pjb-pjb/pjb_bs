@@ -51,6 +51,9 @@
 		},
 		mounted() {
 			this.sel();
+			if(this.$route.query.flag==1){
+				this.activeName2="second";
+			}
 		}
 	};
 </script>

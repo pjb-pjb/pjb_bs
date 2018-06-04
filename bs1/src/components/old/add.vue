@@ -49,19 +49,19 @@
 					<el-option :key="index" :label="val" :value="val" v-for="(item,val,index) of bedDatas"></el-option>
 				</el-select>
 				<el-row>
-					<div v-for="(item,index) in bedDatas[hnum]" style="box-sizing: border-box;border: 1px solid #000;justify-content: flex-start;overflow: hidden;display: flex;">
+					<div v-for="(item,index) in bedDatas[hnum]" style="box-sizing: border-box;border: 1px solid #000;justify-content: flex-start;display: flex;">
 						<div style="display: flex;justify-content:center;align-items: center;border-right: 1px solid #000;font-size: 26px;width: 50px;text-align: center;">
 							{{item[0]}}<br/>层
 						</div>
 						<div style="flex-grow: 1;padding: 10px;">
-							<el-col :span="8" v-for="(item1,index1) in item[1]" :key="index1">
+							<el-col style="position: relative;" :span="8" v-for="(item1,index1) in item[1]" :key="index1">
 								<el-card shadow="hover" :body-style="{ padding: '0px' }" style="min-height: 150px;">
-									<div @dblclick="qz(item1,item[3],index,index1)">
+									<div @mouseleave="qx(hnum+item1[0])" @dblclick="qz(item1,item[3],index,index1)">
 										<div style="font-size: 24px;padding: 5px 0;text-align: center;">
 											<span>{{item1[0]}}({{item[2]}})</span>
 										</div>
 										<div style="display: flex;">
-											<img src="../../assets/kc.png" class="image">
+											<img @click="xq(hnum+item1[0])" src="../../assets/kc.png" class="image">
 											<div style="flex-grow: 1;text-align: center;">
 												<div v-if="item1[1]==-1">
 													<span class="yuan"></span>
@@ -72,6 +72,16 @@
 													<div>空余{{item1[1]}}张床</div>
 												</div>
 											</div>
+										</div>
+										<div :ref="hnum+item1[0]" :class="hnum+item1[0]" class="b" style="z-index: 1000px;position: absolute;left: 0;top: -35px;width: 130px;box-shadow: 0px 0px 10px 1px;" v-if="item1[3]">
+											<el-col :span="24" v-for="(e,index) in item1[3]" :key="index">
+												<el-card class="a" shadow="hover" :body-style="{ padding: '0px' }" style="min-height: 70px;background: #000;color: #FFFFFF;cursor: pointer;">
+													<div>{{e.oid}}</div>
+													<div>{{e.oname}}</div>
+													<span>{{e.age}}</span>
+													<span>{{e.osex}}</span>
+												</el-card>
+											</el-col>
 										</div>
 									</div>
 								</el-card>
@@ -95,14 +105,45 @@
 					this.onameDatas.push(val.oname);
 				});
 			});
-			fetch("/api/old/selEm").then(function(e) {
+			this.selOld();
+		},
+		methods: {
+			selOld(){
+				fetch("/api/old/selEm").then(function(e) {
 				return e.json();
 			}).then((e) => {
 				this.emDatas = e[0];
 				this.sDatas = e[1];
 			});
-		},
-		methods: {
+			fetch("/api/enter/selAll").then(function(e) {
+				return e.json();
+			}).then((e) => {
+				var obj = {};
+				e.forEach((val) => {
+					var str = val.eaddress;
+					var age = Math.ceil((new Date().getTime() - new Date(val.obir).getTime()) / 1000 / 69 / 60 / 24 / 365);
+					val.age = age;
+					if(!(str.substr(0, 1) in obj)) {
+						obj[str.substr(0, 1)] = {};
+					}
+					if(!(str.substr(1) in obj[str.substr(0, 1)])) {
+						obj[str.substr(0, 1)][str.substr(1)] = [];
+					}
+					obj[str.substr(0, 1)][str.substr(1)].push(val);
+				});
+				this.oldDatas = obj;
+			})
+			},
+			xq(item){
+				if(this.$refs[item]){
+					this.$refs[item][0].style.display="block";
+				}
+			},
+			qx(item){
+				if(this.$refs[item]){
+					this.$refs[item][0].style.display="none";
+				}
+			},
 			qz(item, r_price, index, index1) {
 				if(item[1] == -1) {
 					this.$message({
@@ -111,7 +152,7 @@
 					});
 					return;
 				}
-				this.arr=[this.hnum, index, index1]
+				this.arr = [this.hnum, index, index1]
 				this.form.eaddress = this.hnum + item[0];
 				this.form.r_price = r_price;
 				this.flag = false;
@@ -144,20 +185,20 @@
 						var em_n = this.form.em_n;
 						var yjf = this.form.yjf;
 						var shprice = this.form.shprice;
-						var arr=this.arr;
-						this.bedDatas[arr[0]][arr[1]][1][arr[2]][1]=this.bedDatas[arr[0]][arr[1]][1][arr[2]][1]-1;
-						this.bedDatas[arr[0]][arr[1]][1][arr[2]][2]=this.bedDatas[arr[0]][arr[1]][1][arr[2]][2]*1+1;
-						var bedinfo="";
-						this.bedDatas[arr[0]].forEach((item)=>{
-							var louceng=item[0];
-							var str="";
-							item[1].forEach((val)=>{
-								str+=val[0]+":"+val[2]+","
+						var arr = this.arr;
+						this.bedDatas[arr[0]][arr[1]][1][arr[2]][1] = this.bedDatas[arr[0]][arr[1]][1][arr[2]][1] - 1;
+						this.bedDatas[arr[0]][arr[1]][1][arr[2]][2] = this.bedDatas[arr[0]][arr[1]][1][arr[2]][2] * 1 + 1;
+						var bedinfo = "";
+						this.bedDatas[arr[0]].forEach((item) => {
+							var louceng = item[0];
+							var str = "";
+							item[1].forEach((val) => {
+								str += val[0] + ":" + val[2] + ","
 							});
-							str=louceng+"."+str.slice(0,-1);
-							bedinfo+=str+"|"
+							str = louceng + "." + str.slice(0, -1);
+							bedinfo += str + "|"
 						});
-						bedinfo=bedinfo.slice(0,-1);
+						bedinfo = bedinfo.slice(0, -1);
 						var params = `oid=${oid}&grade=${grade}&nprice=${nprice}&eaddress=${eaddress}&r_price=${r_price}&ctime=${ctime}&em_n=${em_n}&yjf=${yjf}&shprice=${shprice}&bedinfo=${bedinfo}&hnum=${this.arr[0]}`;
 						fetch("/api/old/addSign", {
 							headers: {
@@ -177,11 +218,12 @@
 								for(let i in this.form) {
 									this.form[i] = "";
 								}
+								this.selOld();
 								fetch("/api/enter/selectAll1").then(function(e) {
 									return e.json();
 								}).then((e) => {
-									this.oidDatas=[];
-									this.onameDatas=[];
+									this.oidDatas = [];
+									this.onameDatas = [];
 									e.forEach((val) => {
 										this.oidDatas.push(val.oid);
 										this.onameDatas.push(val.oname);
@@ -216,6 +258,9 @@
 						var obj = {};
 						this.hnum = e.length > 0 ? e[0].hnum : "";
 						e.forEach((val) => {
+							if(!(val.hnum in this.oldDatas)) {
+								this.oldDatas[val.hnum] = {};
+							}
 							obj[val.hnum] = [];
 							val.bedinfo.split("|").forEach((val1) => {
 								var arr = [];
@@ -223,10 +268,11 @@
 								arr1 = val1.split(".");
 								arr1[1].split(",").forEach((val2) => {
 									var arr2 = val2.split(":");
+									var Arr = this.oldDatas[val.hnum][arr2[0]];
 									if(arr2[1] == val.bed_n) {
-										arr.push([arr2[0], -1,arr2[1]]);
+										arr.push([arr2[0], -1, arr2[1], Arr]);
 									} else {
-										arr.push([arr2[0], val.bed_n - arr2[1],arr2[1]]);
+										arr.push([arr2[0], val.bed_n - arr2[1], arr2[1], Arr]);
 									}
 								});
 								obj[val.hnum].push([arr1[0], arr, val.r_type_name, val.r_price]);
@@ -240,6 +286,7 @@
 		},
 		data() {
 			return {
+				oldDatas:[],
 				arr: [],
 				sDatas: [],
 				hnum: "",
@@ -249,7 +296,7 @@
 				oidDatas: [],
 				emDatas: [],
 				form: {
-					ctime:new Date(),
+					ctime: new Date(),
 					oname: "",
 					oid: "",
 					eaddress: "",
@@ -348,5 +395,14 @@
 	
 	.clearfix:after {
 		clear: both;
+	}
+	.b{
+		display: none;
+	}
+	.a{
+		transition: all .3s;
+	}
+	.a:hover{
+		color: #ADFF2F !important;
 	}
 </style>

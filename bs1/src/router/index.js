@@ -7,6 +7,7 @@ import selectVisInfo from '@/components/vis/selectVisInfo.vue'
 import editVisInfo from '@/components/vis/editVisInfo.vue'
 import addGoodsSign from '@/components/goods/addGoodsSign.vue'
 import selectGoods from '@/components/goods/selectGoods.vue'
+import enterInfo1 from '@/components/goods/enterInfo.vue'
 import outGoods from '@/components/goods/outGoods.vue'
 import editGoodsInfo from '@/components/goods/editGoodsInfo.vue'
 import outInfo from '@/components/goods/outInfo.vue'
@@ -44,6 +45,11 @@ import addUser from '@/components/system/addUser.vue'
 import yzInfo from '@/components/healthcare/yzInfo.vue'
 import addYz from '@/components/healthcare/addYz.vue'
 import editYz from '@/components/healthcare/editYz.vue'
+import yzEditInfo from '@/components/healthcare/yzEditInfo.vue'
+import shanshiInfo from '@/components/system/shanshiInfo.vue'
+import nurseInfo from '@/components/system/nurseInfo.vue'
+import pgTestInfo from '@/components/system/pgTestInfo.vue'
+import addTest from '@/components/system/addTest.vue'
 
 Vue.use(Router)
 
@@ -183,6 +189,24 @@ var router = new Router({
 			}, {
 				path: "/editYz/:did",
 				component: editYz
+			}, {
+				path: "/yzEditInfo",
+				component: yzEditInfo
+			}, {
+				path: "/shanshiInfo",
+				component: shanshiInfo
+			}, {
+				path: "/nurseInfo",
+				component: nurseInfo
+			}, {
+				path: "/enterInfo1",
+				component: enterInfo1
+			}, {
+				path: "/pgTestInfo",
+				component: pgTestInfo
+			}, {
+				path: "/addTest",
+				component: addTest
 			}]
 		}
 	]

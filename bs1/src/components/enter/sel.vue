@@ -77,7 +77,7 @@
 			<div style="width: 100%;height: 3px;background: #ccc;margin-bottom: 20px;"></div>
 			<div>
 				<h2 style="display: inline-block;font-size: 20px;padding:0 0 20px 30px;">缴费护理信息</h2>
-				<el-button v-if="form2.em_n!=-1" @click="xy" type="warning" style="float: right;margin-right: 30px;">续约</el-button>
+				<el-button v-if="form2.em_n!=-1&&form.estatus!='-1'" @click="xy" type="warning" style="float: right;margin-right: 30px;">续约</el-button>
 			</div>
 			<el-form ref="form2" :model="form2" label-width="80px" :rules="rules" style="display: flex;flex-wrap: wrap;">
 				<el-form-item label="签约时间">
@@ -93,23 +93,29 @@
 					<el-input v-model="form2.eaddress" @focus="selAddress" readonly style="width: 217px;" v-if="!flag"></el-input>
 					<el-input :value="form2.eaddress" disabled style="width: 217px;" v-else></el-input>
 				</el-form-item>
-				<el-form-item label="床位费">
+				<el-form-item label="床位费" v-if="form.estatus!='-1'">
 					<el-input v-model="form2.r_price" disabled style="width: 217px;"></el-input>
 				</el-form-item>
 				<el-form-item label="剩余费用" prop="yjf">
 					<el-input v-model="form2.yjf" type="number" disabled style="width: 217px;"></el-input>
 				</el-form-item>
-				<el-form-item label="膳食标准" prop="shprice">
+				<el-form-item label="膳食标准" prop="shprice" v-if="form.estatus!='-1'">
 					<el-select v-model="form2['shprice']" placeholder="请选择" filterable v-if="!flag">
 						<el-option :key="index" :label="item['shprice']+'/月'" :value="item['shprice'].toString()" v-for="(item,index) in sDatas"></el-option>
 					</el-select>
 					<el-input :value="form2.shprice+'/月'" disabled style="width: 217px;" v-else></el-input>
 				</el-form-item>
-				<el-form-item label="护理等级" prop="grade">
+				<el-form-item label="护理等级" prop="grade" v-if="form.estatus!='-1'">
 					<el-input v-model="form2.grade" disabled style="width: 217px;"></el-input>
 				</el-form-item>
-				<el-form-item label="护理费" prop="grade_price">
+				<el-form-item label="护理费" prop="grade_price" v-if="form.estatus!='-1'">
 					<el-input v-model="form2.nprice" disabled style="width: 217px;"></el-input>
+				</el-form-item>
+				<el-form-item label="退住原因" prop="tz_because" v-if="form.estatus=='-1'">
+					<el-input v-model="form2.tz_because" disabled style="width: 217px;"></el-input>
+				</el-form-item>
+				<el-form-item label="退住时间" prop="tz_time" v-if="form.estatus=='-1'">
+					<el-input v-model="form2.tz_time" disabled style="width: 217px;"></el-input>
 				</el-form-item>
 			</el-form>
 			<div v-if="flag1" style="width: 100%;min-height: 1200px;background: rgba(255,255,255,1);position: absolute;z-index: 100;left: 0;top: 0;">
@@ -118,19 +124,19 @@
 						<el-option :key="index" :label="val" :value="val" v-for="(item,val,index) of bedDatas"></el-option>
 					</el-select>
 					<el-row>
-						<div v-for="(item,index) in bedDatas[hnum]" style="box-sizing: border-box;border: 1px solid #000;justify-content: flex-start;overflow: hidden;display: flex;">
+						<div v-for="(item,index) in bedDatas[hnum]" style="box-sizing: border-box;border: 1px solid #000;justify-content: flex-start;display: flex;">
 							<div style="display: flex;justify-content:center;align-items: center;border-right: 1px solid #000;font-size: 26px;width: 50px;text-align: center;">
 								{{item[0]}}<br/>层
 							</div>
 							<div style="flex-grow: 1;padding: 10px;">
-								<el-col :span="8" v-for="(item1,index1) in item[1]" :key="index1">
+								<el-col style="position: relative;" :span="8" v-for="(item1,index1) in item[1]" :key="index1">
 									<el-card shadow="hover" :body-style="{ padding: '0px' }" style="min-height: 150px;">
-										<div @dblclick="qz(item1,item[3],index,index1)">
+										<div @mouseleave="qx1(hnum+item1[0])" @dblclick="qz(item1,item[3],index,index1)">
 											<div style="font-size: 24px;padding: 5px 0;text-align: center;">
 												<span>{{item1[0]}}({{item[2]}})</span>
 											</div>
 											<div style="display: flex;">
-												<img src="../../assets/kc.png" class="image">
+												<img @click="xq(hnum+item1[0])" src="../../assets/kc.png" class="image">
 												<div style="flex-grow: 1;text-align: center;">
 													<div v-if="item1[1]==-1">
 														<span class="yuan"></span>
@@ -142,6 +148,16 @@
 													</div>
 												</div>
 											</div>
+											<div :ref="hnum+item1[0]" :class="hnum+item1[0]" class="b" style="z-index: 1000px;position: absolute;left: 0;top: -35px;width: 130px;box-shadow: 0px 0px 10px 1px;" v-if="item1[3]">
+											<el-col :span="24" v-for="(e,index) in item1[3]" :key="index">
+												<el-card class="a" shadow="hover" :body-style="{ padding: '0px' }" style="min-height: 70px;background: #000;color: #FFFFFF;cursor: pointer;">
+													<div>{{e.oid}}</div>
+													<div>{{e.oname}}</div>
+													<span>{{e.age}}</span>
+													<span>{{e.osex}}</span>
+												</el-card>
+											</el-col>
+										</div>
 										</div>
 									</el-card>
 								</el-col>
@@ -158,8 +174,44 @@
 
 <script>
 	export default {
+		mounted(){
+			this.selOld();
+		},
 		props: ["oidDatas", "onameDatas"],
 		methods: {
+			selOld(){
+				fetch("/api/enter/selAll").then(function(e) {
+				return e.json();
+			}).then((e) => {
+				var obj = {};
+				e.forEach((val) => {
+					var str = val.eaddress;
+					var age = Math.ceil((new Date().getTime() - new Date(val.obir).getTime()) / 1000 / 69 / 60 / 24 / 365);
+					val.age = age;
+					if(!(str.substr(0, 1) in obj)) {
+						obj[str.substr(0, 1)] = {};
+					}
+					if(!(str.substr(1) in obj[str.substr(0, 1)])) {
+						obj[str.substr(0, 1)][str.substr(1)] = [];
+					}
+					obj[str.substr(0, 1)][str.substr(1)].push(val);
+				});
+				this.oldDatas = obj;
+			})
+			},
+			xq(item){
+				if(this.$refs[item]){
+					this.$refs[item][0].style.display="block";
+				}
+			},
+			qx1(item){
+				console.log(item);
+				if(this.$refs[item]){
+					if(this.$refs[item][0]){
+						this.$refs[item][0].style.display="none";
+					}
+				}
+			},
 			xy() {
 				new Promise(function(resolve, reject) {
 					fetch("/api/old/selEM1").then(function(e) {
@@ -242,6 +294,9 @@
 						var obj = {};
 						this.hnum = e.length > 0 ? e[0].hnum : "";
 						e.forEach((val) => {
+							if(!(val.hnum in this.oldDatas)) {
+								this.oldDatas[val.hnum] = {};
+							}
 							obj[val.hnum] = [];
 							val.bedinfo.split("|").forEach((val1) => {
 								var arr = [];
@@ -249,10 +304,11 @@
 								arr1 = val1.split(".");
 								arr1[1].split(",").forEach((val2) => {
 									var arr2 = val2.split(":");
+									var Arr = this.oldDatas[val.hnum][arr2[0]];
 									if(arr2[1] == val.bed_n) {
-										arr.push([arr2[0], -1, arr2[1]]);
+										arr.push([arr2[0], -1, arr2[1], Arr]);
 									} else {
-										arr.push([arr2[0], val.bed_n - arr2[1], arr2[1]]);
+										arr.push([arr2[0], val.bed_n - arr2[1], arr2[1], Arr]);
 									}
 								});
 								obj[val.hnum].push([arr1[0], arr, val.r_type_name, val.r_price]);
@@ -405,6 +461,7 @@
 						this.oldEAddress[0] = this.form2.eaddress.substring(0, 1);
 						this.oldEAddress[1] = this.form2.eaddress.substring(1);
 						this.flag = true;
+						this.selOld();
 					} else {
 						this.$message({
 							message: "修改失败",
@@ -416,6 +473,7 @@
 		},
 		data() {
 			return {
+				oldDatas:[],
 				xynx: "",
 				arr: [],
 				hnum: "",
@@ -456,7 +514,9 @@
 					nprice: "",
 					r_price: "",
 					shprice: "",
-					endtime: ""
+					endtime: "",
+					tz_because:"",
+					tz_time:""
 				},
 				rules: {
 					oname: {
@@ -609,5 +669,14 @@
 	
 	.clearfix:after {
 		clear: both;
+	}
+	.b{
+		display: none;
+	}
+	.a{
+		transition: all .3s;
+	}
+	.a:hover{
+		color: #ADFF2F !important;
 	}
 </style>

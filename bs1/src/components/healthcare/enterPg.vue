@@ -158,7 +158,7 @@
 							});
 							return;
 						}
-						var params = `oid=${this.form.oid}&pscore=${this.form.pscore}&ptime=${this.form.ptime}&weight=${this.form.weight}&gmyw=${this.form.gmyw}&disease=${this.form.disease}`;
+						var params = `oid=${this.form.oid}&pscore=${Math.floor(this.form.pscore)}&ptime=${this.form.ptime}&weight=${this.form.weight}&gmyw=${this.form.gmyw}&disease=${this.form.disease}`;
 						var str = "";
 						if(this.flag1 == 0) {
 							str = "/api/pg/addSign?" + params;
@@ -171,6 +171,7 @@
 							return e.text();
 						}).then((e) => {
 							if(e == "ok") {
+								this.form.pscore=Math.floor(this.form.pscore)
 								this.flag = true;
 								this.isPg = "重新评估";
 								this.form.weight=this.form.weight.toString();
@@ -254,14 +255,13 @@
 		watch: {
 			'$store.state.score' (val) {
 				this.form.pscore = val;
-				if(val>=180){
+				if(val>=90){
 					this.form.grade='三级';
-				}else if(val<180&&val>=160){
+				}else if(val<90&&val>=75){
 					this.form.grade="二级";
-				}else if(val<160&&val>=140){
+				}else if(val<75&&val>=60){
 					this.form.grade="一级";
 				}else{
-					console.log()
 					this.form.grade="特殊";
 				}
 			}

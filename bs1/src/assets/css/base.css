@@ -1,0 +1,25 @@
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-style: normal;
+	text-align: center;
+	font-family: "微软雅黑" sans-serif "宋体";
+}
+a{
+	text-decoration: none;
+}
+img{
+	border: none;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 556305 */
+  src: url('https://at.alicdn.com/t/font_556305_2vjbv8rpphkt9.eot');
+  src: url('https://at.alicdn.com/t/font_556305_2vjbv8rpphkt9.eot?#iefix') format('embedded-opentype'),
+  url('https://at.alicdn.com/t/font_556305_2vjbv8rpphkt9.woff') format('woff'),
+  url('https://at.alicdn.com/t/font_556305_2vjbv8rpphkt9.ttf') format('truetype'),
+  url('https://at.alicdn.com/t/font_556305_2vjbv8rpphkt9.svg#iconfont') format('svg');
+}
+.iconfont{
+	font-family: "iconfont";
+}

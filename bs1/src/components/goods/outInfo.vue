@@ -15,15 +15,8 @@
 			</el-table-column>
 			<el-table-column fixed prop="otime" label="时间" width="300" sortable>
 			</el-table-column>
-			<el-table-column fixed prop="obecause" label="出库原因" width="155" sortable>
+			<el-table-column fixed prop="obecause" label="出库原因" width="155">
 			</el-table-column>
-			<!--<el-table-column label="操作" width="275">
-				<template slot-scope="scope">
-					<el-button type="text" size="small" @click="addNum(scope.row)">添加库存</el-button>
-					<el-button type="text" size="small" @click="edit(scope.row.gid)">编辑</el-button>
-					<el-button @click="handleClick(scope.row.gid)" type="text" size="small">删除</el-button>
-				</template>
-			</el-table-column>-->
 		</el-table>
 		<div v-if="tableData.length>0">
 			<el-pagination background layout="prev, pager, next" :total="pages*10" style="text-align: right;margin-top: 20px;margin-right: 20px;" @current-change="fanye">

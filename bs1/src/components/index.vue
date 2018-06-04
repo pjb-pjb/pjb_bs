@@ -48,6 +48,9 @@
 										<router-link to="/outGoods">
 											<el-menu-item index="2-3">出库登记</el-menu-item>
 										</router-link>
+										<router-link to="/enterInfo1">
+											<el-menu-item index="2-3">入库记录</el-menu-item>
+										</router-link>
 										<router-link to="/outInfo">
 											<el-menu-item index="2-4">出库记录</el-menu-item>
 										</router-link>
@@ -144,6 +147,9 @@
 										<router-link to="/yzInfo">
 											<el-menu-item index="7-2">医嘱查询</el-menu-item>
 										</router-link>
+										<router-link to="/yzEditInfo">
+											<el-menu-item index="7-3">医嘱修改记录</el-menu-item>
+										</router-link>
 									</el-menu-item-group>
 								</el-submenu>
 							</el-menu>
@@ -163,11 +169,20 @@
 										<router-link to="/rtInfo">
 											<el-menu-item index="8-3">房间类型管理</el-menu-item>
 										</router-link>
+										<router-link to="/nurseInfo">
+											<el-menu-item index="8-4">护理费管理</el-menu-item>
+										</router-link>
+										<router-link to="/shanshiInfo">
+											<el-menu-item index="8-5">膳食费管理</el-menu-item>
+										</router-link>
+										<router-link to="/pgTestInfo">
+											<el-menu-item index="8-6">评估试题管理</el-menu-item>
+										</router-link>
 										<router-link to="/userInfo">
-											<el-menu-item index="8-4">账号管理</el-menu-item>
+											<el-menu-item index="8-7">账号管理</el-menu-item>
 										</router-link>
 										<router-link to="/rzInfo">
-											<el-menu-item index="8-5">操作日志</el-menu-item>
+											<el-menu-item index="8-8">操作日志</el-menu-item>
 										</router-link>
 									</el-menu-item-group>
 								</el-submenu>
@@ -246,6 +261,7 @@
 	}
 	
 	.a span {
+		cursor: pointer;
 		transition: all 0.3s;
 	}
 	
